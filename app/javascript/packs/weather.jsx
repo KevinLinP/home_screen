@@ -30,7 +30,9 @@ export default class Weather extends React.Component {
   update() {
     if (moment().isAfter(this.refreshedAt().add(5, 'minutes'))) {
       document.getElementById("forecast_embed").src = '';
-      document.getElementById("forecast_embed").src = this.url();
+      window.setTimeout(() => {
+        document.getElementById("forecast_embed").src = this.url();
+      }, 1000);
 
       this.setState({
         refreshedAt: moment().valueOf()
