@@ -12,8 +12,7 @@ export default class Weather extends React.Component {
   }
 
   componentDidMount() {
-    const update = this.update.bind(this);
-    this.timerIntervalId = window.setInterval(update, 1000);
+    this.timerIntervalId = window.setInterval(this.update.bind(this), 15000);
   }
 
   componentWillUnmount() {
