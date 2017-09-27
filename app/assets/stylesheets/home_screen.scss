@@ -4,5 +4,21 @@
 
 .clock {
   font-size: 5rem;
+  font-weight: 400;
   line-height: 1.0;
+}
+
+.weather {
+  position: relative;
+}
+
+.weather-refreshed-ago {
+  @extend .text-right;
+  @extend .text-muted;
+  line-height: 1.0;
+  font-size: .8rem;
+
+  position: relative;
+  bottom: 32px;
+  right: 19px
 }
