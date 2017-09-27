@@ -4,14 +4,33 @@ import _ from 'underscore'
 import moment from 'moment'
 
 export default class DaylightInfo extends React.Component {
-  render() {
-    const events = _.filter(this.props.events, (event) => {
-      return event.timestamp >= (new Date()).getTime();
-    });
-    const event = _.first(events);
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentEvent: this.currentEvent()
+    };
+  }
 
+  refresh() {
+    this.setState({
+      currentEvent: this.currentEvent()
+    });
+  }
+
+  currentEvent() {
+    const now = moment();
+
+    const events = _.filter(this.props.events, (event) => {
+      return moment(event.timestamp).isAfter(now);
+    });
+
+    return _.first(events);
+  }
+
+  render() {
+    // https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes
     return (
-      <DaylightEvent type={event.type} timestamp={event.timestamp} />
+      <DaylightEvent {...this.state.currentEvent} pastEvent={this.refresh.bind(this)}/>
     );
   }
 }
@@ -19,22 +38,28 @@ export default class DaylightInfo extends React.Component {
 class DaylightEvent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.calculateRemaining();
+    this.state = {...this.calculateRemaining()};
   }
 
   componentDidMount() {
-    this.timerIntervalId = window.setInterval(() => {
-      this.setState(this.calculateRemaining());
-    }, 5000);
+    this.timerIntervalId = window.setInterval(this.refresh.bind(this), 5000);
   }
 
   componentWillUnmount() {
     window.clearInterval(this.timerIntervalId);
   }
 
+  refresh() {
+    this.setState(this.calculateRemaining());
+  }
+
   calculateRemaining() {
     const now = moment();
     const futureTime = moment(this.props.timestamp);
+
+    if (now.isAfter(futureTime)) {
+      this.props.pastEvent();
+    }
 
     return {
       remainingHours: futureTime.diff(now, 'hours'),
@@ -45,7 +70,9 @@ class DaylightEvent extends React.Component {
   render() {
     return (
       <div className="daylight-event">
-        <span className={'daylight-event-' + this.props.type}>{this.props.type}</span> in <span className="daylight-event-time">{this.state.remainingHours}h {this.state.remainingMinutes}m</span>
+        <span className={'daylight-event-' + this.props.type}>{this.props.type}</span>
+        <span> in </span>
+        <span className="daylight-event-time">{this.state.remainingHours}h {this.state.remainingMinutes}m</span>
       </div>
     );
   }
