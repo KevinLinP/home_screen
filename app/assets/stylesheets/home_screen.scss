@@ -2,6 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.daylight-event-time {
+  font-weight: 600;
+}
+
+.daylight-event-sunrise {
+  @extend .daylight-event-time;
+  color: rgb(229, 148, 0);
+}
+
+.daylight-event-sunset {
+  @extend .daylight-event-time;
+  color: blue;
+}
+
 .clock {
   font-size: 5rem;
   font-weight: 400;

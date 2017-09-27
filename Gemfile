@@ -12,6 +12,7 @@ gem 'puma', '~> 3.7'
 
 # ruby libraries
 gem 'memoist'
+gem 'sun'
 
 # views
 gem 'webpacker', '~> 3.0'

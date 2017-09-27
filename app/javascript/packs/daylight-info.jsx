@@ -45,7 +45,7 @@ class DaylightEvent extends React.Component {
   render() {
     return (
       <div className="daylight-event">
-        {this.props.type} in {this.state.remainingHours}h {this.state.remainingMinutes}m
+        <span className={'daylight-event-' + this.props.type}>{this.props.type}</span> in <span className="daylight-event-time">{this.state.remainingHours}h {this.state.remainingMinutes}m</span>
       </div>
     );
   }
