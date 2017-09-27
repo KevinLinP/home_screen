@@ -6,13 +6,14 @@ export default class Weather extends React.Component {
   constructor() {
     super();
     this.state = {
-      refreshedAt: moment(),
+      refreshedAt: moment().valueOf(), // store a moment object here if you want a really bad time
       refreshedAtAgo: this.minutesAgoString(0)
     };
   }
 
   componentDidMount() {
-    this.timerIntervalId = window.setInterval(this.update.bind(this), 15000);
+    const update = this.update.bind(this);
+    this.timerIntervalId = window.setInterval(update, 1000);
   }
 
   componentWillUnmount() {
@@ -23,17 +24,21 @@ export default class Weather extends React.Component {
     return "//forecast.io/embed/#lat=47.639469&lon=-122.325989&name=Seattle&units=uk";
   }
 
+  refreshedAt() {
+    return moment(this.state.refreshedAt);
+  }
+
   update() {
-    if (moment().isAfter(this.state.refreshedAt.add(5, 'minutes'))) {
+    if (moment().isAfter(this.refreshedAt().add(5, 'minutes'))) {
       document.getElementById("forecast_embed").src = '';
       document.getElementById("forecast_embed").src = this.url();
 
       this.setState({
-        refreshedAt: moment()
+        refreshedAt: moment().valueOf()
       });
     }
 
-    const minutesAgo = moment().diff(this.refreshedAt, 'minutes');
+    const minutesAgo = moment().diff(this.refreshedAt(), 'minutes');
 
     this.setState({
       refreshedAtAgo: this.minutesAgoString(minutesAgo)
