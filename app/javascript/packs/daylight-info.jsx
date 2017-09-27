@@ -1,13 +1,22 @@
-// Run this example by adding <%= javascript_pack_tag 'hello_react' %> to the head of your layout file,
-// like app/views/layouts/application.html.erb. All it does is render <div>Hello React</div> at the bottom
-// of the page.
-
 import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
+
+import _ from 'underscore'
 import moment from 'moment'
 
-class SolarEvent extends React.Component {
+export default class DaylightInfo extends React.Component {
+  render() {
+    const events = _.filter(this.props.events, (event) => {
+      return event.timestamp >= (new Date()).getTime();
+    });
+    const event = _.first(events);
+
+    return (
+      <DaylightEvent type={event.type} timestamp={event.timestamp} />
+    );
+  }
+}
+
+class DaylightEvent extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.calculateRemaining();
@@ -16,7 +25,7 @@ class SolarEvent extends React.Component {
   componentDidMount() {
     this.timerIntervalId = window.setInterval(() => {
       this.setState(this.calculateRemaining());
-    }, 1000);
+    }, 5000);
   }
 
   componentWillUnmount() {
@@ -25,7 +34,7 @@ class SolarEvent extends React.Component {
 
   calculateRemaining() {
     const now = moment();
-    const futureTime = moment.unix(this.props.timestamp);
+    const futureTime = moment(this.props.timestamp);
 
     return {
       remainingHours: futureTime.diff(now, 'hours'),
@@ -35,14 +44,9 @@ class SolarEvent extends React.Component {
 
   render() {
     return (
-      <div className="solar-event">
+      <div className="daylight-event">
         {this.props.type} in {this.state.remainingHours}h {this.state.remainingMinutes}m
       </div>
     );
   }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const data = document.data.solar;
-  ReactDOM.render(<SolarEvent type={data.type} timestamp={data.timestamp} />, document.getElementById('react-solar'));
-});

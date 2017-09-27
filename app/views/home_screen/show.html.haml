@@ -1,6 +1,13 @@
-%h1 Hi!
-#react-solar
+.row
+  .col-1
+  .col-10
+    .row
+      .col-4.text-center.my-5
+        #react-clock.my-0
+        #react-daylight-info
+      .col-8
+        %iframe(id="forecast_embed" frameborder="0" height="245" width="100%" src="//forecast.io/embed/#lat=47.639469&lon=-122.325989&name=Seattle&units=uk")
 
 :javascript
   document.data = document.data || {};
-  document.data.solar = {type: 'sunrise', timestamp: 1506175080};
+  document.data.daylightInfo = #{daylight_info.to_json};
