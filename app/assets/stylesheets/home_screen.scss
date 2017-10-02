@@ -36,3 +36,16 @@
   bottom: 32px;
   right: 19px
 }
+
+.todo-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.todo-list {
+  @extend .list-unstyled;
+}
+
+.todo-item {
+  @extend .my-1;
+}

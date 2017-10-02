@@ -15,7 +15,7 @@ gem 'memoist'
 gem 'sun'
 
 # views
-gem 'webpacker', '~> 3.0'
+gem 'webpacker', '~> 3.0', github: 'rails/webpacker'
 gem 'hamlit-rails'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'

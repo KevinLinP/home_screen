@@ -16,4 +16,9 @@ module HomeScreenHelper
     data
   end
 
+  def todos
+    # yes, it's weird that as_json actually returns a (json-ready) hash
+    Todo.all.as_json(only: [:id, :position], methods: [:text, :completed])
+  end
+
 end

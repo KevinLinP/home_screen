@@ -7,9 +7,13 @@
         #react-daylight-info
       .col-md-8.col-xs-12
         #react-weather
+    .row
+      .col-md-4
+        #react-todo
 
 // add todo, sites, countdown, reddit tldr
 
 :javascript
   document.data = document.data || {};
   document.data.daylightInfo = #{daylight_info.to_json};
+  document.data.todo = #{todos.to_json};
