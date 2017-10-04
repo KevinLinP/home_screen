@@ -1,5 +1,5 @@
 class Listable < ActiveRecord::Base
-  validates :type, :position, :data, presence: true
+  validates :type, :data, presence: true
   validates :position, uniqueness: {scope: :type}
 
   after_initialize :set_defaults
