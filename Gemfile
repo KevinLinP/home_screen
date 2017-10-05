@@ -13,6 +13,7 @@ gem 'puma', '~> 3.7'
 # ruby libraries
 gem 'memoist'
 gem 'sun'
+gem 'rest-client'
 
 # views
 gem 'webpacker', '~> 3.0', github: 'rails/webpacker'

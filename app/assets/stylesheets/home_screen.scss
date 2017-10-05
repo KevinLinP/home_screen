@@ -49,3 +49,35 @@
 .todo-item {
   @extend .my-1;
 }
+
+.nicehash-stats-heading {
+  @extend .todo-heading;
+  @extend .mb-2
+}
+
+.nicehash-stats-list {
+  @extend .row;
+
+  dt {
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .col-6;
+    @extend .mb-1;
+    font-weight: 500;
+  }
+
+  dd {
+    @extend .col-6;
+    @extend .text-right;
+    @extend .mb-1;
+  }
+}
+
+.nicehash-stats-value {
+  font-size: 125%;
+  font-weight: 600;
+}
+
+.nicehash-stats-units {
+  font-weight: 600;
+}

@@ -22,6 +22,8 @@ export default class Todo extends React.Component {
     data.position = lastPosition + 1;
     data.id = 'tmp' + (new Date).valueOf();
 
+    // TODO: persist to server
+
     this.setState({
       items: this.state.items.concat([data])
     });
@@ -47,7 +49,7 @@ function TodoItem(props) {
   return (<li className="todo-item">{props.text}</li>);
 }
 
-// bleh
+// https://reactjs.org/docs/forms
 class TodoForm extends React.Component {
   constructor(props) {
     super(props);
@@ -57,8 +59,13 @@ class TodoForm extends React.Component {
   }
 
   handleSubmit(event) {
-    this.props.onCreate(this.state)
     event.preventDefault();
+
+    this.props.onCreate(this.state)
+
+    this.setState({
+      text: ''
+    });
   }
 
   handleChange(event) {
