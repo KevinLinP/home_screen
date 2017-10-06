@@ -66,8 +66,8 @@ class Nicehash
     end
 
     {
-      last_hour_earned: (now_balance - hour_ago_balance),
-      last_day_earned: (now_balance - day_ago_balance)
+      last_hour_earned_mbtc: ((now_balance - hour_ago_balance) * 1_000_000).round(2),
+      last_day_earned_mbtc: ((now_balance - day_ago_balance) * 1_000_000).round(2)
     }
   end
 

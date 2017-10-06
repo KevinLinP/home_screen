@@ -4,8 +4,8 @@ export default class NicehashStats extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastHourEarned: this.props.initialStats['last_hour_earned'],
-      lastDayEarned: this.props.initialStats['last_day_earned'],
+      lastHourEarnedMbtc: this.props.initialStats['last_hour_earned_mbtc'],
+      lastDayEarnedMbtc: this.props.initialStats['last_day_earned_mbtc'],
       mbtcPerUsd: this.props.initialStats['mbtc_per_usd']
     };
   }
@@ -29,19 +29,16 @@ export default class NicehashStats extends React.Component {
   //}
 
   render() {
-    const lastHour = parseFloat(this.state.lastHourEarned * 1000000.0).toFixed(2);
-    const lastDay = parseFloat(this.state.lastDayEarned * 1000000.0).toFixed(2);
-
     // tried iterating through array. React needs array items components wrapped in a tag, Bootstrap's dl doesn't like that
     return (
       <div>
         <div className="nicehash-stats-heading">Internet Heater Machine</div>
         <dl className="nicehash-stats-list">
           <dt>Last hour</dt>
-          <dd><span className="nicehash-stats-value">{lastHour}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
+          <dd><span className="nicehash-stats-value">{this.state.lastHourEarnedMbtc}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
 
           <dt>Last Day</dt>
-          <dd><span className="nicehash-stats-value">{lastDay}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
+          <dd><span className="nicehash-stats-value">{this.state.lastDayEarnedMbtc}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
 
           <dt>US$1</dt>
           <dd><span className="nicehash-stats-value">{this.state.mbtcPerUsd}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
