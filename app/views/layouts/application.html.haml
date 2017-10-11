@@ -1,5 +1,6 @@
 !!!
-%html
+// TODO: update to ServiceWorker
+%html{manifest: 'application.manifest'}
   %head
     %meta{content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type'}
     %meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
@@ -8,13 +9,10 @@
 
     = csrf_meta_tags
     = stylesheet_link_tag :application, media: :all, 'data-turbolinks-track': 'reload'
-    %link{href: "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel: "stylesheet", integrity: "sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin: "anonymous"}
 
   %body
     .container-fluid
       = yield
-
-    %script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
 
     = javascript_include_tag :application, 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'home_screen'

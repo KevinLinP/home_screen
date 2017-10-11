@@ -11,6 +11,9 @@ gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.7'
 # gem 'bcrypt', '~> 3.1.7'
 
+# rails libraries
+gem 'rack-offline'
+
 # ruby libraries
 gem 'memoist'
 gem 'sun'
@@ -27,6 +30,7 @@ gem 'jbuilder', '~> 2.5'
 
 # asset libraries
 gem 'bootstrap', '~> 4.0.0.beta'
+gem 'font-awesome-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

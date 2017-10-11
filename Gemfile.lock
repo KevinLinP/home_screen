@@ -76,6 +76,8 @@ GEM
     erubi (1.6.1)
     execjs (2.7.0)
     ffi (1.9.18)
+    font-awesome-rails (4.7.0.2)
+      railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     hamlit (2.8.4)
@@ -123,6 +125,7 @@ GEM
     public_suffix (3.0.0)
     puma (3.10.0)
     rack (2.0.3)
+    rack-offline (0.6.4)
     rack-proxy (0.6.2)
       rack
     rack-test (0.7.0)
@@ -219,6 +222,7 @@ DEPENDENCIES
   bootstrap (~> 4.0.0.beta)
   byebug
   capybara (~> 2.13)
+  font-awesome-rails
   hamlit-rails
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
@@ -226,6 +230,7 @@ DEPENDENCIES
   pg (~> 0.18)
   pry
   puma (~> 3.7)
+  rack-offline
   rails (~> 5.1.4)
   rest-client
   sass-rails (~> 5.0)
@@ -237,6 +242,9 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
   webpacker (~> 3.0)!
+
+RUBY VERSION
+   ruby 2.4.2p198
 
 BUNDLED WITH
    1.16.0.pre.2
