@@ -7,12 +7,12 @@ export default class Weather extends React.Component {
     super();
     this.state = {
       refreshedAt: moment().valueOf(), // store a moment object here if you want a really bad time
-      refreshedAtAgo: this.minutesAgoString(0)
     };
+    this.update = this.update.bind(this);
   }
 
   componentDidMount() {
-    this.timerIntervalId = window.setInterval(this.update.bind(this), 15000);
+    this.timerIntervalId = window.setInterval(this.update, 15000);
   }
 
   componentWillUnmount() {
@@ -38,27 +38,12 @@ export default class Weather extends React.Component {
         refreshedAt: moment().valueOf()
       });
     }
-
-    const minutesAgo = moment().diff(this.refreshedAt(), 'minutes');
-
-    this.setState({
-      refreshedAtAgo: this.minutesAgoString(minutesAgo)
-    });
-  }
-
-  minutesAgoString(minutesAgo) {
-    if (minutesAgo == 1) {
-      return '1 minute';
-    } else {
-      return minutesAgo + ' minutes';
-    }
   }
 
   render() {
     return (
       <div className="weather">
         <iframe id="forecast_embed" frameBorder="0" height="245" width="100%" src={this.url()}></iframe>
-        <div className="weather-refreshed-ago">refreshed {this.state.refreshedAtAgo} ago</div>
       </div>
     )
   }

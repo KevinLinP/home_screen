@@ -1,4 +1,5 @@
 module HomeScreenHelper
+  include ApplicationHelper
   SEATTLE_LATITUDE = 47.639469
   SEATTLE_LONGITUDE = -122.325989
 
@@ -19,26 +20,6 @@ module HomeScreenHelper
   def todos
     # yes, it's weird that as_json actually returns a (json-ready) hash
     Todo.all.as_json(only: [:id, :position], methods: [:text, :completed])
-  end
-
-  def nicehash_stats
-    stats = Nicehash.new.stats.clone
-    stats[:timestamp] = unix_time_milliseconds(stats[:timestamp])
-
-    stats
-  end
-
-  protected
-
-  def unix_time_milliseconds(time)
-    case time
-    when Integer
-      time * 1000
-    when DateTime, Time
-      unix_time_milliseconds(time.to_i) # lol, ahahahahhahahahahaha
-    else
-      raise NotImplementedError.new
-    end
   end
 
 end

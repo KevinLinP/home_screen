@@ -12,5 +12,5 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Clock/>, document.getElementById('react-clock'));
   ReactDOM.render(<Weather/>, document.getElementById('react-weather'));
   //ReactDOM.render(<Todo items={document.data.todo} />, document.getElementById('react-todo'));
-  ReactDOM.render(<NicehashStats initialStats={document.data.nicehashStats} />, document.getElementById('react-nicehash-stats'));
+  ReactDOM.render(<NicehashStats/>, document.getElementById('react-nicehash-stats'));
 });
