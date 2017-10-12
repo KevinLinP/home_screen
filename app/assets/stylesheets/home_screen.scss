@@ -104,12 +104,16 @@
   @extend .mb-3;
 }
 
+.links-form {
+  @extend .mx-1;
+}
+
 .links-form-heading {
   font-weight: 500;
   @extend .mb-1;
 }
 
-.links-form {
+.links-form-form {
   @extend .form-inline;
   
   input {

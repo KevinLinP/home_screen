@@ -18,11 +18,12 @@ export default class LinksForm extends React.Component {
     this.props.onChange(event.target.name, event.target.value);
   }
 
+  // TODO: code up an imag picker ... maybe
   render() {
     return (
-      <div>
+      <div className="links-form">
         <div className="links-form-heading">new</div>
-        <form className="links-form" onSubmit={this.handleSubmit}>
+        <form className="links-form-form" onSubmit={this.handleSubmit}>
           <input type="text" placeholder="name" name="name" value={this.props.name} onChange={this.handleChange} />
           <input type="text" placeholder="url" name="url" value={this.props.url} onChange={this.handleChange} />
           <input type="text" placeholder="icon url" name="image" value={this.props.image} onChange={this.handleChange} />
