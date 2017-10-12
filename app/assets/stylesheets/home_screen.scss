@@ -91,6 +91,22 @@
 
 .links {
   @extend .row;
+  @extend .mb-3
+}
+
+.links-form {
+  @extend .form-inline;
+  
+  input {
+    @extend .form-control;
+    @extend .mr-1;
+  }
+
+  button[type=submit] {
+    @extend .btn;
+    @extend .btn-light;
+  }
+
 }
 
 .link {
