@@ -101,9 +101,13 @@
 
 .links {
   @extend .row;
-  @extend .mb-3
+  @extend .mb-3;
 }
 
+.links-form-heading {
+  font-weight: 500;
+  @extend .mb-1;
+}
 
 .links-form {
   @extend .form-inline;
@@ -121,6 +125,7 @@
 
 .link {
   @extend .col-md-3;
+  position: relative;
 }
 
 .link-link {
@@ -151,4 +156,8 @@
 .link-delete-button {
   @extend .btn;
   @extend .btn-light;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
 }
