@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       cache ActionController::Base.helpers.asset_path('application.js')
       cache Webpacker.manifest.lookup("home_screen.js")
 
-      network "/"
+      network "*"
     end
     get '/application.manifest' => rack_offline
   end
