@@ -8,7 +8,7 @@ class LinksController < ApplicationController
 
   def create
     link_positions = Link.all.pluck(:position)
-    new_position = link_positions.max + 1
+    new_position = link_positions.present? ? (link_positions.max + 1) : 0
 
     Link.create!(link_params.merge({
       position: new_position
