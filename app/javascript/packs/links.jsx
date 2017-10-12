@@ -19,7 +19,7 @@ export default class Links extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
 
-    const api = restful('http://' + window.location.host, fetchBackend(fetch)); // TODO: hacky
+    const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
     this.collection = api.all('links'); 
 
     this.collection.getAll().then(this.handleIndexResponse);
