@@ -1,14 +1,30 @@
 import React from 'react'
-import { connect, PromiseState } from 'react-refetch'
+import restful, { fetchBackend } from 'restful.js';
 
 import _ from 'underscore'
 
-class Links extends React.Component {
+export default class Links extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isEditing: true
     }
+
+    const api = restful('http://' + window.location.host, fetchBackend(fetch)); // TODO: hacky
+    this.collection = api.all('links'); 
+
+    this.collection.getAll().then((response) => {
+      let links = _.map(response.body(), (entity) => {
+        return entity.data();
+      });
+
+      links = _.sortBy(links, 'position');
+
+      this.setState({
+        links: links
+      });
+    });
   }
 
   handleCreate(props) {
@@ -16,19 +32,14 @@ class Links extends React.Component {
   }
 
   render() {
-    const { linksFetch } = this.props;
-
-    if (!linksFetch.fulfilled) {
-      return null;
+    let links = [];
+    if (this.state.links) {
+      links = _.map(this.state.links, (link) => {
+        return (
+          <Link key={link.id} {...link}/>
+        );
+      });
     }
-
-    let links = linksFetch.value;
-    links = _.sortBy(links, 'position');
-    links = _.map(links, (link) => {
-      return (
-        <Link key={link.id} {...link}/>
-      );
-    });
 
     let form = null;
     if (this.state.isEditing) {
@@ -94,9 +105,3 @@ class LinksForm extends React.Component {
     );
   }
 }
-
-export default connect(props => ({
-  linksFetch: {
-    url: '/links'
-  }
-}))(Links)

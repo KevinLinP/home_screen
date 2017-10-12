@@ -9,6 +9,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-refetch": "^1.0.1",
+    "restful.js": "^0.9.6",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
