@@ -171,6 +171,7 @@
 
 .link {
   @extend .col-md-3;
+  @extend .mb-1;
   position: relative;
 }
 
@@ -202,6 +203,7 @@
 .link-name {
   @extend .text-center;
   font-weight: 200;
+  line-height: 1.25;
 }
 
 .link-edit-controls {
@@ -214,5 +216,6 @@
     @extend .btn-light;
     @extend .ml-1;
     cursor: pointer;
+    z-index: 10;
   }
 }

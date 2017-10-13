@@ -10,17 +10,17 @@ export default class Links extends React.Component {
     super(props);
 
     this.state = {
-      showEditControls: false,
       links: [],
-      ...this.emptyFormProps()
+      showEditControls: false,
+      form: this.emptyFormProps()
     };
 
     this.handleIndexResponse = this.handleIndexResponse.bind(this);
-    this.handleEditButtonOnClick = this.handleEditButtonOnClick.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEditToggle = this.handleEditToggle.bind(this);
+    this.handleLinkEditButton = this.handleLinkEditButton.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
     this.resetForm = this.resetForm.bind(this);
 
@@ -47,31 +47,25 @@ export default class Links extends React.Component {
 
   resetForm() {
     this.setState({
-      ...this.emptyFormProps()
+      form: this.emptyFormProps()
     });
   }
 
   emptyFormProps() {
     return {
-      form: {
-        name: '',
-        url: '',
-        image: ''
-      }
+      name: '',
+      url: '',
+      image: ''
     };
   }
 
-  handleSubmit() {
+  handleFormSubmit() {
     let data = this.state.form;
     let promise;
 
     if (data.id) {
       const id = data.id;
-      data = {
-        name: data.name,
-        url: data.url,
-        image: data.image
-      };
+      data = _.pick(data, 'name', 'url', 'image');
 
       promise = this.collection.patch(id, data);
     } else {
@@ -81,9 +75,9 @@ export default class Links extends React.Component {
     promise.then(this.handleIndexResponse).then(this.resetForm);
   }
 
-  handleEdit(link) {
+  handleLinkEditButton(link) {
     if (link.id == this.state.form.id) {
-      this.resetform();
+      this.resetForm();
     } else {
       this.setState({form: link});
     }
@@ -99,48 +93,58 @@ export default class Links extends React.Component {
     });
   }
 
-  handleEditButtonOnClick() {
+  handleEditToggle() {
     var newState = !this.state.showEditControls;
     this.setState({
       showEditControls: newState
     });
 
-    if (!newState) {
+    if (!newState && this.state.form.id) {
       this.resetForm();
     }
   }
 
   handleSortEnd({oldIndex, newIndex}) {
+    if (newIndex == oldIndex) {
+      return;
+    }
+
     const link = this.state.links[oldIndex];
 
-    // arrayMove doesn't update .index, just changes position of items ... I think
     this.setState({
-      links: arrayMove(this.state.links, oldIndex, newIndex)
+      links: arrayMove(this.state.links, oldIndex, newIndex) // doesn't update .index, only returns new array with reordered items
     });
 
     this.collection.patch(link.id, {position: newIndex}).then(this.handleIndexResponse);
   }
 
   render() {
-    let editButtonClass = 'links-edit-button';
-
-    let sortableContainerSettings = {
-      axis: 'xy'
-    };
-
     let form = null;
+    let editButtonClass = 'links-edit-button';
     if (this.state.showEditControls) {
-      form = (<LinksForm onSubmit={this.handleSubmit} onChange={this.handleFormChange} {...this.state.form} />);
+      form = (<LinksForm onSubmit={this.handleFormSubmit} onChange={this.handleFormChange} {...this.state.form} />);
       editButtonClass += ' links-edit-button-editing';
     }
+
+    const sortableContainerSettings = {
+      axis: 'xy'
+    };
+    const linksListProps = {
+      links: this.state.links,
+      showEditControls: this.state.showEditControls,
+      onLinkEditButton: this.handleLinkEditButton,
+      onDelete: this.handleDelete,
+      onSortEnd: this.handleSortEnd,
+      ...sortableContainerSettings
+    };
 
     return (
       <div>
         <div className="links-heading">
           <span className="links-heading-text">Favorites</span>
-          <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditButtonOnClick}>edit</a>
+          <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditToggle}>edit</a>
         </div>
-        <LinksList links={this.state.links} onSortEnd={this.handleSortEnd} showEditControls={this.state.showEditControls} onEdit={this.handleEdit} onDelete={this.handleDelete} {...sortableContainerSettings}/>
+        <LinksList {...linksListProps}/>
         {form}
       </div>
     );
@@ -149,13 +153,17 @@ export default class Links extends React.Component {
 
 const LinksList = SortableContainer((props) => {
   const links = _.map(props.links, (link) => {
+    const sortableElementProps = {
+      disabled: !props.showEditControls
+    };
+
     const linkProps = {
-      key: link.id,
       ...link,
+      key: link.id,
       showEditControls: props.showEditControls,
-      disabled: !props.showEditControls,
-      onEdit: () => {props.onEdit(link);},
-      onDelete: () => {props.onDelete(link);}
+      onEdit: () => {props.onLinkEditButton(link);},
+      onDelete: () => {props.onDelete(link);},
+      ...sortableElementProps
     };
 
     return (
