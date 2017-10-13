@@ -1,4 +1,5 @@
 class Listable < ActiveRecord::Base
+  # TODO: use acts_as_list or similar
   validates :type, :data, presence: true
   validates :position, uniqueness: {scope: :type}
 

@@ -33,10 +33,10 @@ export default class Links extends React.Component {
       let data = entity.data();
       data.index = data.position;
       delete data.position;
-      console.log(data.position);
 
       return data;
     });
+    links = _.sortBy(links, 'index');
 
     this.setState({
       links: links,

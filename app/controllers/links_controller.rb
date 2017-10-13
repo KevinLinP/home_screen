@@ -29,7 +29,7 @@ class LinksController < ApplicationController
   protected
 
   def render_index
-    links = Link.all.as_json(only: [:id, :position], methods: [:name, :url, :image])
+    links = Link.all.order(:position).as_json(only: [:id, :position], methods: [:name, :url, :image])
     render json: links
   end
 
