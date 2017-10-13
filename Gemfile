@@ -15,7 +15,7 @@ gem 'puma', '~> 3.7'
 gem 'rack-offline'
 
 # activerecord libraries
-gem 'activerecord-import'
+gem 'acts_as_list'
 
 # ruby libraries
 gem 'memoist'

@@ -40,7 +40,6 @@ export default class Links extends React.Component {
 
     this.setState({
       links: links,
-      ...this.emptyFormProps()
     });
   }
 
@@ -53,7 +52,13 @@ export default class Links extends React.Component {
   }
 
   handleCreate() {
-    this.collection.post(this.formProps()).then(this.handleIndexResponse);
+    this.collection.post(this.formProps())
+      .then(this.handleIndexResponse)
+      .then(() => {
+        this.setState({
+          ...this.emptyFormProps()
+        })
+      });
   }
 
   handleDelete(id) {
@@ -87,18 +92,14 @@ export default class Links extends React.Component {
   }
 
   handleSortEnd({oldIndex, newIndex}) {
-    let newLinks = arrayMove(this.state.links, oldIndex, newIndex);
+    const link = this.state.links[oldIndex];
 
-    // arrayMove doesn't actually change link.index
-    newLinks = _.map(newLinks, (link, index) => {
-      return Object.assign({}, link, {index: index})
-    });
-    
+    // arrayMove doesn't update .index, just changes position of items ... I think
     this.setState({
-      links: newLinks
+      links: arrayMove(this.state.links, oldIndex, newIndex)
     });
 
-    this.collection.custom('sort').post(newLinks).then(this.handleIndexResponse);
+    this.collection.patch(link.id, {position: newIndex}).then(this.handleIndexResponse);
   }
 
   render() {
