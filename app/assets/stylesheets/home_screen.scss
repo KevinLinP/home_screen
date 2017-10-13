@@ -182,16 +182,21 @@
     color: black;
     text-decoration: none;
 
-    filter: saturate(8);
+    .link-image {
+      filter: brightness(115%) saturate(200%);
+    }
   }
+}
+
+.link-image-container {
+  padding: 1rem 2rem 0.4rem 2rem;
 }
 
 .link-image {
   @extend .img-fluid;
   @extend .mx-auto;
   @extend .d-block;
-  
-  padding: 1rem 2rem 0.4rem 2rem;
+  @extend .rounded;
 }
 
 .link-name {

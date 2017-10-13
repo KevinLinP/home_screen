@@ -123,7 +123,9 @@ function Link(props) {
   return (
     <div className="link">
       <a className="link-link" href={props.url}>
-        <img className="link-image" src={props.image} />
+        <div className="link-image-container">
+          <img className="link-image" src={props.image} />
+        </div>
         <div className="link-name">{props.name}</div>
       </a>
       {editControls}
