@@ -2,7 +2,10 @@ Rails.application.routes.draw do
 
   root 'home_screen#show'
 
-  resources :links, only: [:index, :create, :destroy]
+  resources :links, only: [:index, :create, :destroy] do
+    post :sort, on: :collection
+  end
+
   resource :nicehash, only: :show
   resource :reddit, only: :show
 

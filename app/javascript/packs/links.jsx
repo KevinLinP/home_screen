@@ -1,6 +1,7 @@
 import React from 'react'
 import restful, { fetchBackend } from 'restful.js';
 import _ from 'underscore'
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 import LinksForm from './links-form'
 
@@ -10,6 +11,7 @@ export default class Links extends React.Component {
 
     this.state = {
       isEditing: false,
+      links: [],
       ...this.emptyFormProps()
     };
 
@@ -18,6 +20,7 @@ export default class Links extends React.Component {
     this.handleCreate = this.handleCreate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
+    this.handleSortEnd = this.handleSortEnd.bind(this);
 
     const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
     this.collection = api.all('links'); 
@@ -27,10 +30,13 @@ export default class Links extends React.Component {
 
   handleIndexResponse(response) {
     let links = _.map(response.body(), (entity) => {
-      return entity.data();
-    });
+      let data = entity.data();
+      data.index = data.position;
+      delete data.position;
+      console.log(data.position);
 
-    links = _.sortBy(links, 'position');
+      return data;
+    });
 
     this.setState({
       links: links,
@@ -80,16 +86,30 @@ export default class Links extends React.Component {
     }
   }
 
+  handleSortEnd({oldIndex, newIndex}) {
+    let newLinks = arrayMove(this.state.links, oldIndex, newIndex);
+
+    // arrayMove doesn't actually change link.index
+    newLinks = _.map(newLinks, (link, index) => {
+      return Object.assign({}, link, {index: index})
+    });
+    
+    this.setState({
+      links: newLinks
+    });
+
+    this.collection.custom('sort').post(newLinks).then(this.handleIndexResponse);
+  }
+
   render() {
     let editButtonClass = 'links-edit-button';
-    let links = [];
-    if (this.state.links) {
-      links = _.map(this.state.links, (link) => {
-        return (
-          <Link key={link.id} isEditing={this.state.isEditing} onDelete={() => {this.handleDelete(link.id)}} {...link}/>
-        );
-      });
-    }
+
+    let sortableContainerSettings = {
+      axis: 'xy',
+      shouldCancelStart: () => {
+        return !this.state.isEditing
+      }
+    };
 
     let form = null;
     if (this.state.isEditing) {
@@ -103,14 +123,25 @@ export default class Links extends React.Component {
           <span className="links-heading-text">Favorites</span>
           <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditButtonOnClick}>edit</a>
         </div>
-        <div className="links">{links}</div>
+        <LinksList links={this.state.links} onSortEnd={this.handleSortEnd} isEditing={this.state.isEditing} onDelete={this.handleDelete} {...sortableContainerSettings}/>
         {form}
       </div>
     );
   }
 }
 
-function Link(props) {
+// starting to look like callback hell
+const LinksList = SortableContainer((props) => {
+  const links = _.map(props.links, (link) => {
+    return (
+      <Link key={link.id} {...link} isEditing={props.isEditing} onDelete={() => {props.onDelete(link.id);}}/>
+    );
+  });
+
+  return (<div className="links">{links}</div>);
+});
+
+const Link = SortableElement((props) => {
   let editControls = null;
   if (props.isEditing) {
     editControls = (
@@ -131,4 +162,4 @@ function Link(props) {
       {editControls}
     </div>
   );
-}
+});
