@@ -2,8 +2,9 @@ Rails.application.routes.draw do
 
   root 'home_screen#show'
 
-  resource :nicehash, only: :show
   resources :links, only: [:index, :create, :destroy]
+  resource :nicehash, only: :show
+  resource :reddit, only: :show
 
   if Rails.env.production?
     rack_offline = Rack::Offline.configure :cache_interval => 7.days.to_i do

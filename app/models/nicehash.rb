@@ -2,7 +2,7 @@ class Nicehash
   extend Memoist
 
   def stats
-    Rails.cache.fetch('nicehash_stats', expires_in: 5.minutes) do
+    Rails.cache.fetch('nicehash_stats', expires_in: 3.minutes) do
       stats = calculate_earned
       stats[:timestamp] = DateTime.now.to_i
       stats[:mbtc_per_usd] = mbtc_per_usd

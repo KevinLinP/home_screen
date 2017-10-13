@@ -17,4 +17,13 @@ module ApplicationHelper
     end
   end
 
+  def iso_date(date)
+    case date
+    when Date
+      date.iso8601
+    else
+      raise NotImplementedError.new
+    end
+  end
+
 end

@@ -18,6 +18,7 @@ gem 'rack-offline'
 gem 'memoist'
 gem 'sun'
 gem 'rest-client'
+gem 'chronic'
 
 # views
 gem 'webpacker', '~> 3.0', github: 'rails/webpacker'

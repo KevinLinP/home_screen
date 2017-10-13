@@ -7,12 +7,7 @@ class LinksController < ApplicationController
   end
 
   def create
-    link_positions = Link.all.pluck(:position)
-    new_position = link_positions.present? ? (link_positions.max + 1) : 0
-
-    Link.create!(link_params.merge({
-      position: new_position
-    }))
+    Link.create!(link_params)
 
     render_index
   end
