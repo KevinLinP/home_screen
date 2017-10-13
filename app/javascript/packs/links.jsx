@@ -141,7 +141,7 @@ export default class Links extends React.Component {
     return (
       <div>
         <div className="links-heading">
-          <span className="links-heading-text">Favorites</span>
+          Favorites
           <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditToggle}>edit</a>
         </div>
         <LinksList {...linksListProps}/>

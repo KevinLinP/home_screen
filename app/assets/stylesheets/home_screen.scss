@@ -1,5 +1,12 @@
 // TODO: break up
 
+.homescreen-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  @extend .mb-2;
+}
+
+
 .daylight-event-time {
   font-weight: 600;
 }
@@ -35,11 +42,6 @@
   right: 19px
 }
 
-.todo-heading {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
 .todo-list {
   @extend .list-unstyled;
 }
@@ -48,97 +50,23 @@
   @extend .my-1;
 }
 
-.nicehash-stats-heading {
-  @extend .todo-heading;
-  @extend .mb-2
-}
-
-.nicehash-stats-list {
-  @extend .row;
-
-  dt {
-    @extend .d-flex;
-    @extend .align-items-center;
-    @extend .col-6;
-    @extend .mb-1;
-    font-weight: 500;
-  }
-
-  dd {
-    @extend .col-6;
-    @extend .text-right;
-    @extend .mb-1;
-  }
-}
-
-.nicehash-stats-value {
-  font-size: 125%;
-  font-weight: 600;
-}
-
-.nicehash-stats-units {
-  font-weight: 600;
-}
-
-// reddit-tldr
-
-.reddit-tldr-heading {
-  @extend .todo-heading;
-  @extend .mb-2;
-}
-
-.reddit-tldr-link {
-  color: rgb(0, 0, 0);
-
-  .fa-external-link {
-    opacity: 0;
-  }
-
-  &:hover {
-    color: rgba(0, 0, 0, 0.65);
-    text-decoration: none;
-
-    .fa-external-link {
-      opacity: 1.0;
-      color: $link-hover-color;
-    }
-  }
-}
-
-.reddit-tldr-date {
-  @extend .mr-1;
-  font-weight: 600;
-  font-size: 110%;
-}
-
-.reddit-tldr-list {
-  @extend .mt-1;
-  @extend .list-unstyled;
-
-  li {
-    line-height: 1.25;
-    margin-bottom: 0.5rem;
-  }
-}
-
 // links
 
 .links-heading {
-  @extend .mb-2;
+  @extend .homescreen-header;
 
   .links-edit-button {
     @extend .ml-2;
     opacity: 0;
+
+    font-weight: normal;
+    font-size: 1rem;
 
     &:hover, &.links-edit-button-editing {
       opacity: 0.75;
       text-decoration: none;
     }
   }
-}
-
-.links-heading-text {
-  @extend .todo-heading;
 }
 
 .links {

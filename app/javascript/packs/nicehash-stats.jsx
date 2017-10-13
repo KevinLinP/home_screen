@@ -1,30 +1,63 @@
 import React from 'react'
+import _ from 'underscore'
 import { connect, PromiseState } from 'react-refetch'
+import lscache from 'lscache'
 
 class NicehashStats extends React.Component {
-  render() {
+  fetchData() {
     const {nicehashFetch} = this.props;
+    const cacheKey = 'nicehash-stats';
+    const lastHourCacheKey = 'nicehash-stats-last-hour';
+    const lastHourField = 'lastHourEarnedMbtc';
 
-    if (!nicehashFetch.fulfilled) {
-      return null;
+    if (nicehashFetch.fulfilled) {
+      const data = _.create(nicehashFetch.value);
+
+      lscache.set(cacheKey, _.omit(data, lastHourField), 60 * 6); // 6 hours
+      lscache.set(lastHourCacheKey, _.pick(data, lastHourField), 30); // 30 minutes
+
+      return data;
+    } else {
+      let data = lscache.get(cacheKey);
+      const lastHour = lscache.get(lastHourCacheKey);
+
+      data = _.extend(data, lastHour);
+
+      return data;
     }
+  }
 
-    const data = nicehashFetch.value;
+  render() {
+    const data = this.fetchData();
 
-    // tried iterating through array. React needs array items components wrapped in a tag, Bootstrap's dl doesn't like that
+    let fields = [
+      {label: 'Last hour', key: 'lastHourEarnedMbtc'},
+      {label: 'Last day', key: 'lastDayEarnedMbtc'},
+      {label: 'US$1', key: 'mbtcPerUsd'}
+    ];
+
+    fields = _.map(fields, (field) => {
+      let value = '';
+      if (data && data[field.key]) {
+        value = data[field.key];
+      }
+
+      return (
+        <li className="nicehash-stats-field" key={field.key}>
+          <div className="nicehash-stats-label">{field.label}</div>
+          <div>
+            <span className="nicehash-stats-value">{value}</span>
+            <span> </span>
+            <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span>
+          </div>
+        </li>
+      );
+    });
+
     return (
       <div>
-        <div className="nicehash-stats-heading">Internet Heater Machine</div>
-        <dl className="nicehash-stats-list">
-          <dt>Last hour</dt>
-          <dd><span className="nicehash-stats-value">{data.lastHourEarnedMbtc}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
-
-          <dt>Last Day</dt>
-          <dd><span className="nicehash-stats-value">{data.lastDayEarnedMbtc}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
-
-          <dt>US$1</dt>
-          <dd><span className="nicehash-stats-value">{data.mbtcPerUsd}</span> <span className="nicehash-stats-units">μ<i className="fa fa-btc"></i></span></dd>
-        </dl>
+        <div className="homescreen-header">Internet Heater Machine</div>
+        <ul className="nicehash-stats-list">{fields}</ul>
       </div>
     )
   }

@@ -37,7 +37,7 @@ export default class Todo extends React.Component {
 
     return (
       <div>
-        <div className="todo-heading">Reminders</div>
+        <div className="homescreen-header">Reminders</div>
         <ul className="todo-list">{items}</ul>
         <TodoForm onCreate={this.handleCreate.bind(this)} />
       </div>

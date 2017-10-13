@@ -1,0 +1,23 @@
+.nicehash-stats-list {
+  @extend .list-unstyled;
+}
+
+.nicehash-stats-field {
+  @extend .d-flex;
+  @extend .justify-content-between;
+  @extend .align-items-center;
+  @extend .mb-1;
+}
+
+.nicehash-stats-label {
+  font-weight: 500;
+}
+
+.nicehash-stats-value {
+  font-size: 125%;
+  font-weight: 600;
+}
+
+.nicehash-stats-units {
+  font-weight: 600;
+}

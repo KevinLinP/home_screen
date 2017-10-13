@@ -1,0 +1,35 @@
+// reddit-tldr
+
+.reddit-tldr-link {
+  color: rgb(0, 0, 0);
+
+  .fa-external-link {
+    opacity: 0;
+  }
+
+  &:hover {
+    color: rgba(0, 0, 0, 0.65);
+    text-decoration: none;
+
+    .fa-external-link {
+      opacity: 1.0;
+      color: $link-hover-color;
+    }
+  }
+}
+
+.reddit-tldr-date {
+  @extend .mr-1;
+  font-weight: 600;
+  font-size: 110%;
+}
+
+.reddit-tldr-list {
+  @extend .mt-1;
+  @extend .list-unstyled;
+
+  li {
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+}
