@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013044439) do
+ActiveRecord::Schema.define(version: 20171013052056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "listables", force: :cascade do |t|
     t.string "type", null: false
-    t.integer "position"
+    t.integer "position", null: false
     t.json "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["position"], name: "index_listables_on_position"
     t.index ["type"], name: "index_listables_on_type"
   end
 

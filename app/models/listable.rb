@@ -1,13 +1,22 @@
 class Listable < ActiveRecord::Base
-  # TODO: use acts_as_list or similar
-  validates :type, :data, presence: true
-  validates :position, uniqueness: {scope: :type}
+  # TODO: consider acts_as_list or similar
+  validates :type, :position, :data, presence: true
+  validates :position, uniqueness: {scope: :type} # cannot be db-enforced =(
 
   after_initialize :set_defaults
+  before_validation :fill_position
 
   protected
 
   def set_defaults
     # intentionally empty
+  end
+
+  # abstract ... method?
+  def fill_position
+    self.position ||= begin
+      link_positions = self.class.all.pluck(:position)
+      link_positions.present? ? (link_positions.max + 1) : 0
+    end
   end
 end
