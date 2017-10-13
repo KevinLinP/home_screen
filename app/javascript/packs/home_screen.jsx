@@ -7,6 +7,7 @@ import Weather from './weather'
 import Todo from './todo'
 import NicehashStats from './nicehash-stats'
 import Links from './links'
+import RedditTldr from './reddit-tldr'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<DaylightInfo events={document.data.daylightInfo} />, document.getElementById('react-daylight-info'));
@@ -15,4 +16,5 @@ document.addEventListener('DOMContentLoaded', () => {
   //ReactDOM.render(<Todo items={document.data.todo} />, document.getElementById('react-todo'));
   ReactDOM.render(<NicehashStats/>, document.getElementById('react-nicehash-stats'));
   ReactDOM.render(<Links/>, document.getElementById('react-links'));
+  ReactDOM.render(<RedditTldr/>, document.getElementById('react-reddit-tldr'));
 });
