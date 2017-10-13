@@ -2,15 +2,23 @@ import React from 'react'
 import restful, { fetchBackend } from 'restful.js';
 import _ from 'underscore'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+import lscache from 'lscache'
 
 import LinksForm from './links-form'
+
+// TODO: figure out how to break up this file
 
 export default class Links extends React.Component {
   constructor(props) {
     super(props);
 
+    let links = lscache.get('links');
+    if (!links) {
+      links = [];
+    }
+
     this.state = {
-      links: [],
+      links: links,
       showEditControls: false,
       form: this.emptyFormProps()
     };
@@ -43,6 +51,8 @@ export default class Links extends React.Component {
     this.setState({
       links: links,
     });
+
+    lscache.set('links', links);
   }
 
   resetForm() {
