@@ -1,5 +1,5 @@
 !!!
-- html_options = Rails.env.production? ? {manifest: 'application.manifest'} : {}
+- html_options = (Rails.env.production? || ENV['APP_CACHE']) ? {manifest: 'application.manifest'} : {}
 // TODO: update to ServiceWorker
 %html{html_options}
   %head

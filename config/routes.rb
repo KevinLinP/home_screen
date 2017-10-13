@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resource :nicehash, only: :show
   resource :reddit, only: :show
 
-  if Rails.env.production?
+  if Rails.env.production? || ENV['APP_CACHE']
     rack_offline = Rack::Offline.configure :cache_interval => 7.days.to_i do
       cache ActionController::Base.helpers.asset_path('application.css')
       cache ActionController::Base.helpers.asset_path('application.js')
