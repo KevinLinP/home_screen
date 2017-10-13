@@ -7,14 +7,20 @@ class LinksController < ApplicationController
   end
 
   def create
-    Link.create!(create_link_params)
+    Link.create!(link_params)
 
     render_index
   end
 
   def update
     link = Link.find(params[:id])
-    link.insert_at(update_link_params[:position])
+
+    position = params[:position]
+    if position
+      link.insert_at(position)
+    else
+      link.update!(link_params)
+    end
 
     render_index
   end
@@ -33,11 +39,7 @@ class LinksController < ApplicationController
     render json: links
   end
 
-  def create_link_params
+  def link_params
     params.permit(:name, :url, :image)
-  end
-
-  def update_link_params
-    params.permit(:position)
   end
 end

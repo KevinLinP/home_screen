@@ -204,11 +204,15 @@
   font-weight: 200;
 }
 
-.link-delete-button {
-  @extend .btn;
-  @extend .btn-light;
+.link-edit-controls {
   position: absolute;
   top: 0;
   right: 0;
-  cursor: pointer;
+
+  button {
+    @extend .btn;
+    @extend .btn-light;
+    @extend .ml-1;
+    cursor: pointer;
+  }
 }

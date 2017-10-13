@@ -10,17 +10,19 @@ export default class Links extends React.Component {
     super(props);
 
     this.state = {
-      isEditing: false,
+      showEditControls: false,
       links: [],
       ...this.emptyFormProps()
     };
 
     this.handleIndexResponse = this.handleIndexResponse.bind(this);
     this.handleEditButtonOnClick = this.handleEditButtonOnClick.bind(this);
-    this.handleCreate = this.handleCreate.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
+    this.resetForm = this.resetForm.bind(this);
 
     const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
     this.collection = api.all('links'); 
@@ -43,51 +45,68 @@ export default class Links extends React.Component {
     });
   }
 
+  resetForm() {
+    this.setState({
+      ...this.emptyFormProps()
+    });
+  }
+
   emptyFormProps() {
     return {
-      formName: '',
-      formUrl: '',
-      formImage: ''
+      form: {
+        name: '',
+        url: '',
+        image: ''
+      }
     };
   }
 
-  handleCreate() {
-    this.collection.post(this.formProps())
-      .then(this.handleIndexResponse)
-      .then(() => {
-        this.setState({
-          ...this.emptyFormProps()
-        })
-      });
+  handleSubmit() {
+    let data = this.state.form;
+    let promise;
+
+    if (data.id) {
+      const id = data.id;
+      data = {
+        name: data.name,
+        url: data.url,
+        image: data.image
+      };
+
+      promise = this.collection.patch(id, data);
+    } else {
+      promise = this.collection.post(data);
+    }
+
+    promise.then(this.handleIndexResponse).then(this.resetForm);
   }
 
-  handleDelete(id) {
-    this.collection.delete(id).then(this.handleIndexResponse);
+  handleEdit(link) {
+    if (link.id == this.state.form.id) {
+      this.resetform();
+    } else {
+      this.setState({form: link});
+    }
+  }
+
+  handleDelete(link) {
+    this.collection.delete(link.id).then(this.handleIndexResponse);
   }
 
   handleFormChange(field, value) {
-    const stateFieldTable = {
-      name: 'formName',
-      url: 'formUrl',
-      image: 'formImage',
-    };
-
     this.setState({
-      [stateFieldTable[field]]: value
+      form: Object.assign({}, this.state.form, {[field]: value})
     });
   }
 
   handleEditButtonOnClick() {
+    var newState = !this.state.showEditControls;
     this.setState({
-      isEditing: !this.state.isEditing
+      showEditControls: newState
     });
-  }
 
-  formProps() {
-    return {
-      name: this.state.formName,
-      url: this.state.formUrl,
-      image: this.state.formImage
+    if (!newState) {
+      this.resetForm();
     }
   }
 
@@ -106,16 +125,13 @@ export default class Links extends React.Component {
     let editButtonClass = 'links-edit-button';
 
     let sortableContainerSettings = {
-      axis: 'xy',
-      shouldCancelStart: () => {
-        return !this.state.isEditing
-      }
+      axis: 'xy'
     };
 
     let form = null;
-    if (this.state.isEditing) {
-      form = (<LinksForm onSubmit={this.handleCreate} onChange={this.handleFormChange} {...this.formProps()} />);
-      editButtonClass += ' links-edit-button-editing'
+    if (this.state.showEditControls) {
+      form = (<LinksForm onSubmit={this.handleSubmit} onChange={this.handleFormChange} {...this.state.form} />);
+      editButtonClass += ' links-edit-button-editing';
     }
 
     return (
@@ -124,18 +140,26 @@ export default class Links extends React.Component {
           <span className="links-heading-text">Favorites</span>
           <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditButtonOnClick}>edit</a>
         </div>
-        <LinksList links={this.state.links} onSortEnd={this.handleSortEnd} isEditing={this.state.isEditing} onDelete={this.handleDelete} {...sortableContainerSettings}/>
+        <LinksList links={this.state.links} onSortEnd={this.handleSortEnd} showEditControls={this.state.showEditControls} onEdit={this.handleEdit} onDelete={this.handleDelete} {...sortableContainerSettings}/>
         {form}
       </div>
     );
   }
 }
 
-// starting to look like callback hell
 const LinksList = SortableContainer((props) => {
   const links = _.map(props.links, (link) => {
+    const linkProps = {
+      key: link.id,
+      ...link,
+      showEditControls: props.showEditControls,
+      disabled: !props.showEditControls,
+      onEdit: () => {props.onEdit(link);},
+      onDelete: () => {props.onDelete(link);}
+    };
+
     return (
-      <Link key={link.id} {...link} isEditing={props.isEditing} onDelete={() => {props.onDelete(link.id);}}/>
+      <Link {...linkProps} />
     );
   });
 
@@ -144,10 +168,15 @@ const LinksList = SortableContainer((props) => {
 
 const Link = SortableElement((props) => {
   let editControls = null;
-  if (props.isEditing) {
+  if (props.showEditControls) {
     editControls = (
-      <div>
-        <button className="link-delete-button" onClick={props.onDelete}><i className="fa fa-trash-o"></i></button>
+      <div className="link-edit-controls">
+        <button className="link-edit-button" onClick={props.onEdit}>
+          <i className="fa fa-pencil-square-o"></i>
+        </button>
+        <button className="link-delete-button" onClick={props.onDelete}>
+          <i className="fa fa-trash-o"></i>
+        </button>
       </div>
     );
   }

@@ -4,7 +4,6 @@ class Listable < ActiveRecord::Base
   validates :type, :data, presence: true
 
   after_initialize :set_defaults
-  before_validation :fill_position
 
   protected
 
