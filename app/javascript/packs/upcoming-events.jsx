@@ -91,7 +91,7 @@ export default class UpcomingEvents extends React.Component {
   }
 
   renderEvent(event) {
-    let countdown = moment(event.date).diff(moment(), 'days');
+    let countdown = moment(event.date).diff(moment(), 'days') + 1;
     if (countdown == 1) {
       countdown += ' day';
     } else {
