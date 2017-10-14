@@ -1,24 +1,25 @@
-.row
-  .col-md-1.d-none.d-md-block
-  .col-md-10.col-xs-12
-    .row
-      .col-md-4.text-center.my-5
-        #react-clock.my-0
-        #react-daylight-info
-      .col-md-8.col-xs-12
-        #react-weather
-    .row
-      .col-md-4
-        -#.mb-5
-          -##react-todo
-        .mb-5
-          #react-nicehash-stats
-        #react-reddit-tldr
-      .col-md-8
-        #react-links
+= cache(expires_in: 1.day) do
+  .row
+    .col-md-1.d-none.d-md-block
+    .col-md-10.col-xs-12
+      .row
+        .col-md-4.text-center.my-5
+          #react-clock.my-0
+          #react-daylight-info
+        .col-md-8.col-xs-12
+          #react-weather
+      .row
+        .col-md-4
+          .mb-5
+            #react-nicehash-stats
+          .mb-5
+            #react-reddit-tldr
+          #react-upcoming-events
+        .col-md-8
+          #react-links
 
-// add todo, sites, countdown
+  // add todo, sites, countdown
 
-:javascript
-  document.data = document.data || {};
-  document.data.daylightInfo = #{daylight_info.to_json};
+  :javascript
+    document.data = document.data || {};
+    document.data.daylightInfo = #{daylight_info.to_json};

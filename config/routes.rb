@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'home_screen#show'
 
   resources :links, only: [:index, :create, :destroy, :update]
+  resources :upcoming_events, only: [:index, :create, :destroy, :update]
   resource :nicehash, only: :show
   resource :reddit, only: [:show, :update]
 
