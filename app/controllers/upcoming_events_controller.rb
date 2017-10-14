@@ -5,17 +5,20 @@ class UpcomingEventsController < ApplicationController
     render_index
   end
 
+  def create
+    UpcomingEvent.create!(upcoming_event_params)
+
+    render_index
+  end
+
   protected
 
-  def render_index
-    upcoming_events = [
-      {name: 'a', date: Date.parse('2017-12-12')},
-      {name: 'b', date: Date.parse('2018-03-17')}
-    ]
+  def upcoming_event_params
+    params.permit(:name, :date)
+  end
 
-    upcoming_events.each do |event|
-      event[:date] = iso_date(event[:date])
-    end
+  def render_index
+    upcoming_events = UpcomingEvent.all.sort_by(&:date).as_json(only: [:id], methods: [:name, :date])
 
     render json: upcoming_events
   end

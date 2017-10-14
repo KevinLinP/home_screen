@@ -6,6 +6,20 @@
   @extend .mb-2;
 }
 
+.homescreen-header-edit-toggle {
+  @extend .ml-2;
+  opacity: 0;
+
+  font-weight: normal;
+  font-size: 1rem;
+
+  &:hover, &.active {
+    opacity: 0.75;
+    text-decoration: none;
+  }
+}
+
+
 
 .daylight-event-time {
   font-weight: 600;
@@ -51,23 +65,6 @@
 }
 
 // links
-
-.links-heading {
-  @extend .homescreen-header;
-
-  .links-edit-button {
-    @extend .ml-2;
-    opacity: 0;
-
-    font-weight: normal;
-    font-size: 1rem;
-
-    &:hover, &.links-edit-button-editing {
-      opacity: 0.75;
-      text-decoration: none;
-    }
-  }
-}
 
 .links {
   @extend .row;

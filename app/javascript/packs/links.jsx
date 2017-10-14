@@ -130,10 +130,10 @@ export default class Links extends React.Component {
 
   render() {
     let form = null;
-    let editButtonClass = 'links-edit-button';
+    let editButtonClass = 'homescreen-header-edit-toggle';
     if (this.state.showEditControls) {
       form = (<LinksForm onSubmit={this.handleFormSubmit} onChange={this.handleFormChange} {...this.state.form} />);
-      editButtonClass += ' links-edit-button-editing';
+      editButtonClass += ' active';
     }
 
     const sortableContainerSettings = {
@@ -150,7 +150,7 @@ export default class Links extends React.Component {
 
     return (
       <div>
-        <div className="links-heading">
+        <div className="homescreen-header">
           Favorites
           <a href="javascript:void(0);" className={editButtonClass} onClick={this.handleEditToggle}>edit</a>
         </div>
