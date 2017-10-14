@@ -19,8 +19,6 @@
   }
 }
 
-
-
 .daylight-event-time {
   font-weight: 600;
 }
@@ -54,93 +52,4 @@
   position: relative;
   bottom: 32px;
   right: 19px
-}
-
-.todo-list {
-  @extend .list-unstyled;
-}
-
-.todo-item {
-  @extend .my-1;
-}
-
-// links
-
-.links {
-  @extend .row;
-  @extend .mb-3;
-}
-
-.links-form {
-  @extend .mx-1;
-}
-
-.links-form-heading {
-  font-weight: 500;
-  @extend .mb-1;
-}
-
-.links-form-form {
-  @extend .form-inline;
-  
-  input {
-    @extend .form-control;
-    @extend .mr-1;
-  }
-
-  button[type=submit] {
-    @extend .btn;
-    @extend .btn-light;
-  }
-}
-
-.link {
-  @extend .col-md-3;
-  @extend .mb-1;
-  position: relative;
-}
-
-.link-link {
-  color: black;
-  text-decoration: none;
-
-  &:hover {
-    color: black;
-    text-decoration: none;
-
-    .link-image {
-      filter: brightness(115%) saturate(200%);
-    }
-  }
-}
-
-.link-image-container {
-  padding: 1rem 2rem 0.4rem 2rem;
-}
-
-.link-image {
-  @extend .img-fluid;
-  @extend .mx-auto;
-  @extend .d-block;
-  @extend .rounded;
-}
-
-.link-name {
-  @extend .text-center;
-  font-weight: 200;
-  line-height: 1.25;
-}
-
-.link-edit-controls {
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  button {
-    @extend .btn;
-    @extend .btn-light;
-    @extend .ml-1;
-    cursor: pointer;
-    z-index: 10;
-  }
 }
