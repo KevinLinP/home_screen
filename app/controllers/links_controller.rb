@@ -1,6 +1,5 @@
 class LinksController < ApplicationController
   include ApplicationHelper
-  skip_before_action :verify_authenticity_token # TODO: put back
 
   def index
     render_index

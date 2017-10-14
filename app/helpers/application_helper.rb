@@ -18,6 +18,8 @@ module ApplicationHelper
   end
 
   def iso_date(date)
+    return nil unless date
+
     case date
     when Date
       date.iso8601

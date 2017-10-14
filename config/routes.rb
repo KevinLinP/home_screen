@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :links, only: [:index, :create, :destroy, :update]
   resource :nicehash, only: :show
-  resource :reddit, only: :show
+  resource :reddit, only: [:show, :update]
 
   if Rails.env.production? || ENV['APP_CACHE']
     rack_offline = Rack::Offline.configure :cache_interval => 7.days.to_i do

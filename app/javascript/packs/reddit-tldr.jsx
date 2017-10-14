@@ -1,66 +1,83 @@
 import React from 'react'
-import { connect, PromiseState } from 'react-refetch'
 import _ from 'underscore'
 import moment from 'moment'
 import lscache from 'lscache'
+import restful, { fetchBackend } from 'restful.js'
 
-// TODO: add 'mark as read' hiding
+export default class RedditTldr extends React.Component {
+  constructor(props) {
+    super(props);
+    this.cacheKey = 'reddit-tldr';
+    this.fetchData = this.fetchData.bind(this);
+    this.handleMarkAsRead = this.handleMarkAsRead.bind(this);
+    this.handleResponse = this.handleResponse.bind(this);
 
-// thought about putting refresh interval as a 'class constant'
-class RedditTldr extends React.Component {
-  fetchData() {
-    const {redditTldrFetch} = this.props;
-    const cacheKey = 'reddit-tldr';
-
-    if (redditTldrFetch.fulfilled) {
-      const data = redditTldrFetch.value;
-      lscache.set(cacheKey, data, 60 * 6); // 6 hours
-
-      return data;
+    let data = lscache.get(this.cacheKey);
+    if (data) {
+      this.state = data;
     } else {
-      return lscache.get(cacheKey);
+      this.state = {};
     }
+
+    const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
+    this.apiMember = api.custom('reddit');
+
+    this.fetchData();
   }
 
-  transformData(data) {
-    data = Object.assign({}, data);
+  componentDidMount() {
+    this.timerIntervalId = window.setInterval(this.fetchData, 1000 * 60 * 15);
+  }
 
+  componentWillUnmount() {
+    window.clearInterval(this.timerIntervalId);
+  }
+
+  fetchData() {
+    this.apiMember.get().then(this.handleResponse);
+  }
+
+  handleMarkAsRead(date) {
+    this.apiMember.patch({lastRead: this.state.date}).then(this.handleResponse);
+  }
+
+  handleResponse(response) {
+    let data = response.body().data();
+
+    data.read = (data.date == data.lastRead);
     data.day = moment(data.date).format('dddd');
-
     data.items = data.title.split(/;\s?/);
-    data.items = _.map(data.items, (item, index) => {
-      return (<li key={index}>{item}</li>);
-    });
 
-    return data;
+    this.setState(data);
+    lscache.set(this.cacheKey, data, 60 * 24);
   }
 
   render() {
-    let data = this.fetchData();
-    if (!data) {
+    if (!this.state.url || this.state.read) {
       return null;
     }
 
-    data = this.transformData(data);
+    const items = _.map(this.state.items, (item, index) => {
+      return (<li key={index}>{item}</li>);
+    });
 
     return (
       <div>
-        <div className="homescreen-header">Reddit tl;dr</div>
-        <a className="reddit-tldr-link" href={data.url} target="_blank">
+        <div className="homescreen-header">
+          Reddit tl;dr
+          <a className="reddit-tldr-mark-as-read" href="javascript:void(0);" onClick={this.handleMarkAsRead}>
+            <i className="fa fa-check" aria-hidden="true"></i>
+          </a>
+        </div>
+      
+        <a className="reddit-tldr-link" href={this.state.url} target="_blank">
           <div>
-            <span className="reddit-tldr-date">{data.day}</span>
+            <span className="reddit-tldr-date">{this.state.day}</span>
             <i className="fa fa-external-link" aria-hidden="true"></i>
           </div>
-          <ul className="reddit-tldr-list">{data.items}</ul>
+          <ul className="reddit-tldr-list">{items}</ul>
         </a>
       </div>
     );
   }
 }
-
-export default connect(props => ({
-  redditTldrFetch: {
-    url: '/reddit',
-    refreshInterval: (1000 * 60 * 15) // 15 minutes
-  }
-}))(RedditTldr)

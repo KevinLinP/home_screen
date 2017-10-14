@@ -1,5 +1,14 @@
 // reddit-tldr
 
+.reddit-tldr-mark-as-read {
+  @extend .ml-2;
+  color: rgb(170, 170, 170);
+
+  &:hover {
+    color: $green;
+  }
+}
+
 .reddit-tldr-link {
   color: rgb(0, 0, 0);
 
