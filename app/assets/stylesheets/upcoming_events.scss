@@ -1,0 +1,50 @@
+.upcoming-events-list {
+  @extend .list-unstyled;
+}
+
+.upcoming-event {
+  @extend .d-flex;
+  @extend .justify-content-between;
+  @extend .align-items-center;
+  @extend .mb-1;
+
+  position: relative;
+}
+
+.upcoming-event-name {
+  font-weight: 500;
+}
+
+.upcoming-event-countdown {
+  font-size: 115%;
+  font-weight: 500;
+}
+
+.upcoming-event-delete {
+  @extend .btn;
+  @extend .btn-light;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.upcoming-events-form-heading {
+  font-weight: 500;
+  @extend .mb-1;
+}
+
+.upcoming-events-form {
+  @extend .form-inline;
+
+  input {
+    @extend .form-control;
+    @extend .mr-1;
+    width: 43.7%;
+  }
+
+  button[type=submit] {
+    @extend .btn;
+    @extend .btn-light;
+  }
+}

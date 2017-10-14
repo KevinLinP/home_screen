@@ -11,6 +11,12 @@ class UpcomingEventsController < ApplicationController
     render_index
   end
 
+  def destroy
+    UpcomingEvent.destroy(params[:id])
+
+    render_index
+  end
+
   protected
 
   def upcoming_event_params

@@ -9,8 +9,6 @@ export default class UpcomingEvents extends React.Component {
     super(props);
     this.cacheKey = 'upcoming-events';
     this.handleApiResponse = this.handleApiResponse.bind(this);
-    this.handleEditToggle = this.handleEditToggle.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleFormInputChange = this.handleFormInputChange.bind(this);
 
     let events = lscache.get(this.cacheKey);
@@ -50,6 +48,10 @@ export default class UpcomingEvents extends React.Component {
     })
   }
 
+  handleDelete(id) {
+    this.apiCollection.delete(id).then(this.handleApiResponse);
+  }
+
   handleFormSubmit(event) {
     event.preventDefault();
 
@@ -75,27 +77,55 @@ export default class UpcomingEvents extends React.Component {
     };
   }
   
-  eventForm() {
+  renderEventForm() {
     return (
-      <form className="upcoming-events-form" onSubmit={this.handleFormSubmit}>
-        <input type="text" placeholder="name" name="name" value={this.state.form.name} onChange={this.handleFormInputChange} />
-        <input type="text" placeholder="date" name="date" value={this.state.form.date} onChange={this.handleFormInputChange} />
-        <button type="submit"><i className="fa fa-plus" aria-hidden="true"></i></button>
-      </form>
+      <div>
+        <div className="upcoming-events-form-heading">new</div>
+        <form className="upcoming-events-form" onSubmit={this.handleFormSubmit.bind(this)}>
+          <input type="text" placeholder="name" name="name" value={this.state.form.name} onChange={this.handleFormInputChange} />
+          <input type="text" placeholder="date" name="date" value={this.state.form.date} onChange={this.handleFormInputChange} />
+          <button type="submit"><i className="fa fa-plus" aria-hidden="true"></i></button>
+        </form>
+      </div>
+    );
+  }
+
+  renderEvent(event) {
+    let countdown = moment(event.date).diff(moment(), 'days');
+    if (countdown == 1) {
+      countdown += ' day';
+    } else {
+      countdown += ' days';
+    }
+
+    let deleteButton = null;
+    if (this.state.editMode) {
+      deleteButton = (<button className="upcoming-event-delete" onClick={() => { this.handleDelete(event.id); }}><i className="fa fa-trash-o" aria-hidden="true"></i></button>);
+    }
+
+    // TODO: handle singular
+    return (
+      <li className="upcoming-event" key={event.id}>
+        <div className="upcoming-event-name">{event.name}</div>
+        <div className="upcoming-event-countdown">{countdown}</div>
+        {deleteButton}
+      </li>
     );
   }
 
   render() {
-    const events = _.map(this.state.events, (event) => {
-      let days = moment(event.date).diff(moment(), 'days');
-
-      return (<li key={event.id}>{event.name} in {days} days</li>); // TODO: handle singular
-    });
+    let events;
+    if (this.state.editMode) {
+      events = this.state.events;
+    } else {
+      events = _.first(this.state.events, 2);
+    }
+    events = _.map(events, this.renderEvent.bind(this));
 
     let eventForm = null;
     let editButtonClass = 'homescreen-header-edit-toggle';
     if (this.state.editMode) {
-      eventForm = this.eventForm();
+      eventForm = this.renderEventForm();
       editButtonClass += ' active';
     }
 
@@ -103,7 +133,7 @@ export default class UpcomingEvents extends React.Component {
       <div>
         <div className="homescreen-header">
           Upcoming
-          <a className={editButtonClass} onClick={this.handleEditToggle} href="javascript:void(0)">edit</a>
+          <a className={editButtonClass} onClick={this.handleEditToggle.bind(this)} href="javascript:void(0)">edit</a>
         </div>
         <ul className="upcoming-events-list">{events}</ul>
         {eventForm}
