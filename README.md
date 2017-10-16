@@ -1,24 +1,11 @@
-# README
+This is my 'browser homepage' in the same idea as the defunct iGoogle personalized homepage.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This loads every time I open a new tab in my browsers, so its meant to load instantly. I used extensive caching with external APIs, browser-side AppCache (to support Safari), and a Local Storage Javascript library for immediate display of slightly stale data.
 
-Things you may want to cover:
+This is my first serious foray into ES6 and I'm liking it so far.
 
-* Ruby version
+### Code Sample Highlights
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Watch me learn React: `app/javascript/packs`
+* Wranging a funky API: `app/models/nicehash.rb`
+* Trying a different way of using Bootstrap: `app/assets/stylesheets`

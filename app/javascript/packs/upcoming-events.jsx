@@ -4,6 +4,7 @@ import _ from 'underscore'
 import lscache from 'lscache'
 import moment from 'moment'
 
+// TODO handle 'today' changing.
 export default class UpcomingEvents extends React.Component {
   constructor(props) {
     super(props);
