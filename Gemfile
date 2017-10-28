@@ -33,7 +33,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 # asset libraries
-gem 'bootstrap', '~> 4.0.0.beta'
+gem 'bootstrap'
 gem 'font-awesome-rails'
 
 group :development, :test do

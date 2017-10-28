@@ -27,6 +27,7 @@
 }
 
 .link {
+  @extend .col-6;
   @extend .col-md-3;
   @extend .mb-1;
   position: relative;

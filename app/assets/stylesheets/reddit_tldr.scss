@@ -13,7 +13,8 @@
   color: rgb(0, 0, 0);
 
   .fa-external-link {
-    opacity: 0;
+    color: $link-hover-color;
+    @extend .d-md-none;
   }
 
   &:hover {
@@ -21,8 +22,7 @@
     text-decoration: none;
 
     .fa-external-link {
-      opacity: 1.0;
-      color: $link-hover-color;
+      @extend .d-md-inline;
     }
   }
 }
