@@ -11,7 +11,7 @@ import RedditTldr from './reddit-tldr'
 import UpcomingEvents from './upcoming-events'
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<DaylightInfo events={document.data.daylightInfo} />, document.getElementById('react-daylight-info'));
+  ReactDOM.render(<DaylightInfo/>, document.getElementById('react-daylight-info'));
   ReactDOM.render(<Clock/>, document.getElementById('react-clock'));
   ReactDOM.render(<Weather/>, document.getElementById('react-weather'));
   //ReactDOM.render(<Todo items={document.data.todo} />, document.getElementById('react-todo'));

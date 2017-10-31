@@ -1,4 +1,4 @@
-= cache(expires_in: 1.day) do
+= cache do
   .row
     .col-md-1.d-none.d-md-block
     .col-md-10.col-xs-12
@@ -17,7 +17,3 @@
           .mb-md-5
             #react-reddit-tldr
           #react-upcoming-events
-
-  :javascript
-    document.data = document.data || {};
-    document.data.daylightInfo = #{daylight_info.to_json};
