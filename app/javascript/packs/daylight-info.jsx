@@ -8,20 +8,19 @@ export default class DaylightInfo extends React.Component {
   constructor(props) {
     super(props);
     this.cacheKey = 'daylight-info';
-    this.eventsLoaded = this.eventsLoaded.bind(this);
-    this.recalculateCurrentEvent = this.recalculateCurrentEvent.bind(this);
+    this.init = this.init.bind(this);
     this.refresh = this.refresh.bind(this);
 
     this.state = {
       events: lscache.get(this.cacheKey)
-    }
+    };
 
     this.fetchApi();
   }
 
   componentDidMount() {
     if (this.state.events) {
-      this.eventsLoaded();
+      this.init();
     }
   }
 
@@ -29,9 +28,9 @@ export default class DaylightInfo extends React.Component {
     window.clearInterval(this.timerIntervalId);
   }
 
-  eventsLoaded() {
+  init() {
     this.timerIntervalId = window.setInterval(this.refresh, 5000);
-    this.recalculateCurrentEvent();
+    this.refresh();
   }
 
   fetchApi() {
@@ -46,39 +45,37 @@ export default class DaylightInfo extends React.Component {
       const prevStateEvents = this.state.events;
       this.setState({ events: events }, () => {
         if (!prevStateEvents) {
-          this.eventsLoaded();
+          this.init();
         }
       });
     });
   }
 
-  recalculateCurrentEvent() {
+  findCurrentEvent() {
     const now = moment();
-    const currentEvent = _.find(this.state.events, (event) => {
+
+    return _.find(this.state.events, (event) => {
       return moment(event.timestamp).isAfter(now);
     });
-
-    this.setState({
-      currentEvent: currentEvent
-    }, this.refresh);
   }
 
   refresh() {
-    const currentEvent = this.state.currentEvent;
-
     const now = moment();
-    const futureTime = moment(currentEvent.timestamp);
+    const newState = {};
 
-    if (now.isAfter(futureTime)) {
-      this.recalculateCurrentEvent();
-    } else {
-      const hours = futureTime.diff(now, 'hours');
-      const minutes = (futureTime.diff(now, 'minutes') % 60);
+    let currentEvent = this.state.currentEvent;
 
-      this.setState({
-        remainingTime: `${hours}h ${minutes}m`
-      });
+    if (!currentEvent || now.isAfter(moment(currentEvent.timestamp))) {
+      currentEvent = this.findCurrentEvent();
+      newState.currentEvent = currentEvent;
     }
+
+    const futureTime = moment(currentEvent.timestamp);
+    const hours = futureTime.diff(now, 'hours');
+    const minutes = (futureTime.diff(now, 'minutes') % 60);
+    newState.remainingTime = `${hours}h ${minutes}m`;
+
+    this.setState(newState);
   }
 
   render() {
@@ -90,7 +87,7 @@ export default class DaylightInfo extends React.Component {
           <span> in </span>
           <span className="daylight-event-time">{this.state.remainingTime}</span>
         </div>
-      )
+      );
     } else {
       return null;
     }
