@@ -8,8 +8,9 @@ export default class DaylightInfo extends React.Component {
   constructor(props) {
     super(props);
     this.cacheKey = 'daylight-info';
-    this.refresh = this.refresh.bind(this);
+    this.eventsLoaded = this.eventsLoaded.bind(this);
     this.recalculateCurrentEvent = this.recalculateCurrentEvent.bind(this);
+    this.refresh = this.refresh.bind(this);
 
     this.state = {
       events: lscache.get(this.cacheKey)
@@ -19,19 +20,39 @@ export default class DaylightInfo extends React.Component {
   }
 
   componentDidMount() {
-    this.timerIntervalId = window.setInterval(this.refresh, 5000);
-    this.refresh();
+    if (this.state.events) {
+      this.eventsLoaded();
+    }
   }
 
   componentWillUnmount() {
     window.clearInterval(this.timerIntervalId);
   }
 
-  recalculateCurrentEvent() {
-    if (!this.state.events) {
-      return;
-    }
+  eventsLoaded() {
+    this.timerIntervalId = window.setInterval(this.refresh, 5000);
+    this.recalculateCurrentEvent();
+  }
 
+  fetchApi() {
+    const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
+    api.all('daylight_info').getAll().then((response) => {
+      const events = _.map(response.body(), (entity) => {
+        return entity.data();
+      });
+
+      lscache.set(this.cacheKey, events, 60 * 60 * 24 * 3); // 3 days
+
+      const prevStateEvents = this.state.events;
+      this.setState({ events: events }, () => {
+        if (!prevStateEvents) {
+          this.eventsLoaded();
+        }
+      });
+    });
+  }
+
+  recalculateCurrentEvent() {
     const now = moment();
     const currentEvent = _.find(this.state.events, (event) => {
       return moment(event.timestamp).isAfter(now);
@@ -42,49 +63,26 @@ export default class DaylightInfo extends React.Component {
     }, this.refresh);
   }
 
-  // TODO: simplify
   refresh() {
-    if (!this.state.events) {
-      return;
-    }
-
     const currentEvent = this.state.currentEvent;
-    if (!this.state.currentEvent) {
-      this.recalculateCurrentEvent();
-      return;
-    }
 
     const now = moment();
     const futureTime = moment(currentEvent.timestamp);
 
     if (now.isAfter(futureTime)) {
       this.recalculateCurrentEvent();
-      return;
-    }
+    } else {
+      const hours = futureTime.diff(now, 'hours');
+      const minutes = (futureTime.diff(now, 'minutes') % 60);
 
-    const hours = futureTime.diff(now, 'hours');
-    const minutes = (futureTime.diff(now, 'minutes') % 60);
-
-    this.setState({
-      remainingTime: `${hours}h ${minutes}m`
-    });
-  }
-
-  fetchApi() {
-    const api = restful(window.location.protocol + '//' + window.location.host, fetchBackend(fetch)); // TODO: hacky
-    api.all('daylight_info').getAll().then((response) => {
-      const events = _.map(response.body(), (entity) => { // blehhhh
-        return entity.data();
+      this.setState({
+        remainingTime: `${hours}h ${minutes}m`
       });
-
-      this.setState({ events: events }, this.recalculateCurrentEvent);
-
-      lscache.set(this.cacheKey, events, 60 * 60 * 24 * 3); // 3 days
-    });
+    }
   }
 
   render() {
-    if (this.state.remainingTime) {
+    if (this.state.currentEvent) {
       const type = this.state.currentEvent.type;
       return (
         <div className="daylight-event">
