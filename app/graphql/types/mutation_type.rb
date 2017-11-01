@@ -17,4 +17,14 @@ Types::MutationType = GraphQL::ObjectType.define do
     }
   end
 
+  field :deleteLink, types.Int do
+    argument :id, !types.ID
+
+    resolve ->(obj, args, ctx) {
+      Link.find(args[:id]).destroy
+
+      args[:id]
+    }
+  end
+
 end
