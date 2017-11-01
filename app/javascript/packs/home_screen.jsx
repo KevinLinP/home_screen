@@ -11,7 +11,7 @@ import Clock from './clock'
 import Weather from './weather'
 //import Todo from './todo'
 import NicehashStats from './nicehash-stats'
-import LinksWithData from './links'
+import LinksWithData from './links-with-data'
 import RedditTldr from './reddit-tldr'
 import UpcomingEvents from './upcoming-events'
 
