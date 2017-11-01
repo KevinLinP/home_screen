@@ -28,21 +28,44 @@ mutation createLink($name: String!, $url: String!, $image: String!) {
 }
 `;
 
+// i'm going to hell.
+const updateFuncFor = (linksField) => {
+  return (store, response) => {
+    const links = response.data[linksField];
+
+    const data = store.readQuery({ query: linksQuery });
+    data.links = links;
+    store.writeQuery({ query: linksQuery, data});
+  } ;
+};
+
 const createLinkOptions = {
   props: ({ mutate }) => ({
-    createLink: (input) => mutate({variables: input})
+    createLink: (input) => mutate({
+      variables: input,
+      update: updateFuncFor('createLink')
+    })
   })
 };
 
 const deleteLink = gql`
 mutation deleteLink($id: ID!) {
-  deleteLink(id: $id)
+  deleteLink(id: $id) {
+    id
+    position
+    name
+    url
+    image
+  }
 }
 `;
 
 const deleteLinkOptions = {
   props: ({ mutate }) => ({
-    deleteLink: (id) => mutate({variables: {id: id}})
+    deleteLink: (id) => mutate({
+      variables: {id: id},
+      update: updateFuncFor('deleteLink')
+    })
   })
 };
 

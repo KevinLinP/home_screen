@@ -47,12 +47,7 @@ export default class Links extends React.Component {
       promise = this.props.createLink(data);
     }
 
-    //promise.then(this.resetForm.bind(this));
-    promise.then(({ data }) => {
-      console.log('got data', data);
-    }).catch((error) => {
-      console.log('there was an error sending the query', error);
-    });
+    promise.then(this.resetForm.bind(this));
   }
 
   handleEditToggle() {
