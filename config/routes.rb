@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   root 'home_screen#show'
 
   resources :links, only: [:index, :create, :destroy, :update]
@@ -7,6 +6,12 @@ Rails.application.routes.draw do
   resource :nicehash, only: :show
   resource :reddit, only: [:show, :update]
   resource :daylight_info, only: :show
+
+  post "/graphql", to: "graphql#execute"
+
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  end
 
   if Rails.env.production? || ENV['APP_CACHE']
     rack_offline = Rack::Offline.configure :cache_interval => 3.days.to_i do
