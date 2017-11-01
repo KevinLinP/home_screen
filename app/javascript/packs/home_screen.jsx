@@ -11,7 +11,7 @@ import Clock from './clock'
 import Weather from './weather'
 //import Todo from './todo'
 import NicehashStats from './nicehash-stats'
-import LinksListWithData from './links'
+import LinksWithData from './links'
 import RedditTldr from './reddit-tldr'
 import UpcomingEvents from './upcoming-events'
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render((<NicehashStats/>), document.getElementById('react-nicehash-stats'));
   ReactDOM.render((
     <ApolloProvider client={client}>
-      <LinksListWithData/>
+      <LinksWithData/>
     </ApolloProvider>
   ), document.getElementById('react-links'));
   ReactDOM.render(<RedditTldr/>, document.getElementById('react-reddit-tldr'));
