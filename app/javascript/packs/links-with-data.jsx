@@ -16,6 +16,17 @@ query {
   }
 }`;
 
+// i'm going to hell.
+const updateFuncFor = (linksField) => {
+  return (store, response) => {
+    const links = response.data[linksField];
+
+    const data = store.readQuery({ query: linksQuery });
+    data.links = links;
+    store.writeQuery({ query: linksQuery, data});
+  };
+};
+
 const createLink = gql`
 mutation createLink($name: String!, $url: String!, $image: String!) {
   createLink(name: $name, url: $url, image: $image) {
@@ -27,17 +38,6 @@ mutation createLink($name: String!, $url: String!, $image: String!) {
   }
 }
 `;
-
-// i'm going to hell.
-const updateFuncFor = (linksField) => {
-  return (store, response) => {
-    const links = response.data[linksField];
-
-    const data = store.readQuery({ query: linksQuery });
-    data.links = links;
-    store.writeQuery({ query: linksQuery, data});
-  } ;
-};
 
 const createLinkOptions = {
   props: ({ mutate }) => ({
@@ -69,8 +69,52 @@ const deleteLinkOptions = {
   })
 };
 
+const updateLink = gql`
+mutation updateLink($id: ID!, $name: String, $url: String, $image: String) {
+  updateLink(id: $id, name: $name, url: $url, image: $image) {
+    id
+    position
+    name
+    url
+    image
+  }
+}
+`;
+
+const updateLinkOptions = {
+  props: ({ mutate }) => ({
+    updateLink: (id, fields) => mutate({
+      variables: {id: id, ...fields},
+      update: updateFuncFor('updateLink')
+    })
+  })
+};
+
+const repositionLink = gql`
+mutation repositionLink($id: ID!, $newPosition: Int!) {
+  repositionLink(id: $id, newPosition: $newPosition) {
+    id
+    position
+    name
+    url
+    image
+  }
+}
+`;
+
+const repositionLinkOptions = {
+  props: ({ mutate }) => ({
+    repositionLink: (id, newPosition) => mutate({
+      variables: {id: id, newPosition: newPosition},
+      update: updateFuncFor('repositionLink')
+    })
+  })
+};
+
 const LinksWithData = compose(
+  graphql(repositionLink, repositionLinkOptions),
   graphql(deleteLink, deleteLinkOptions),
+  graphql(updateLink, updateLinkOptions),
   graphql(createLink, createLinkOptions),
   graphql(linksQuery)
 )(Links);

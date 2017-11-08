@@ -28,26 +28,39 @@ export default class Links extends React.Component {
     };
   }
 
-  handleFormChange(field, value) {
-    this.setState({
-      form: Object.assign({}, this.state.form, {[field]: value})
-    });
-  }
-
   handleFormSubmit() {
     let data = this.state.form;
     let promise;
 
     if (data.id) {
-      //const id = data.id;
-      //data = _.pick(data, 'name', 'url', 'image');
+      const id = data.id;
+      data = _.pick(data, 'name', 'url', 'image');
 
-      //promise = this.collection.patch(id, data);
+      promise = this.props.updateLink(id, data);
     } else {
       promise = this.props.createLink(data);
     }
 
     promise.then(this.resetForm.bind(this));
+  }
+
+  handleLinkEditButton(link) {
+    console.log('handling edit');
+    if (link.id == this.state.form.id) {
+      this.resetForm();
+    } else {
+      this.setState({form: link});
+    }
+  }
+
+  handleDelete(link) {
+    this.props.deleteLink(link.id);
+  }
+
+  handleFormChange(field, value) {
+    this.setState({
+      form: Object.assign({}, this.state.form, {[field]: value})
+    });
   }
 
   handleEditToggle() {
@@ -61,8 +74,18 @@ export default class Links extends React.Component {
     }
   }
 
-  handleDelete(link) {
-    this.props.deleteLink(link.id);
+  handleSortEnd({oldIndex, newIndex}) {
+    if (newIndex == oldIndex) {
+      return;
+    }
+
+    const link = this.props.data.links[oldIndex];
+
+    //this.setState({
+      //links: arrayMove(this.props.data.links, oldIndex, newIndex) // doesn't update .index, only returns new array with reordered items
+    //});
+
+    this.props.repositionLink(link.id, newIndex);
   }
 
   render() {
@@ -84,9 +107,9 @@ export default class Links extends React.Component {
     const linksListProps = {
       links,
       showEditControls: this.state.showEditControls,
-      onLinkEditButton: this.handleLinkEditButton,
+      onLinkEditButton: this.handleLinkEditButton.bind(this),
       onDelete: this.handleDelete.bind(this),
-      onSortEnd: this.handleSortEnd,
+      onSortEnd: this.handleSortEnd.bind(this),
       ...sortableContainerSettings
     };
 
