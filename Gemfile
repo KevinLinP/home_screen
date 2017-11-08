@@ -54,5 +54,5 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry'
-  gem 'graphiql-rails'
+  gem 'graphiql-rails', git: 'https://github.com/rmosolgo/graphiql-rails'
 end

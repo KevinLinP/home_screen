@@ -5,16 +5,25 @@ import gql from 'graphql-tag';
 
 import Links from './links'
 
+const fragment = gql`
+fragment LinkIndex on Link {
+  id
+  position
+  name
+  url
+  image
+}
+`
+
 const linksQuery = gql`
 query {
   links {
-    id
-    position
-    name
-    url
-    image
+    ...LinkIndex
   }
-}`;
+}
+
+${fragment}
+`;
 
 // i'm going to hell.
 const updateFuncFor = (linksField) => {
@@ -30,13 +39,11 @@ const updateFuncFor = (linksField) => {
 const createLink = gql`
 mutation createLink($name: String!, $url: String!, $image: String!) {
   createLink(name: $name, url: $url, image: $image) {
-    id
-    position
-    name
-    url
-    image
+    ...LinkIndex
   }
 }
+
+${fragment}
 `;
 
 const createLinkOptions = {
@@ -51,13 +58,11 @@ const createLinkOptions = {
 const deleteLink = gql`
 mutation deleteLink($id: ID!) {
   deleteLink(id: $id) {
-    id
-    position
-    name
-    url
-    image
+    ...LinkIndex
   }
 }
+
+${fragment}
 `;
 
 const deleteLinkOptions = {
@@ -72,13 +77,11 @@ const deleteLinkOptions = {
 const updateLink = gql`
 mutation updateLink($id: ID!, $name: String, $url: String, $image: String) {
   updateLink(id: $id, name: $name, url: $url, image: $image) {
-    id
-    position
-    name
-    url
-    image
+    ...LinkIndex
   }
 }
+
+${fragment}
 `;
 
 const updateLinkOptions = {
@@ -93,13 +96,11 @@ const updateLinkOptions = {
 const repositionLink = gql`
 mutation repositionLink($id: ID!, $newPosition: Int!) {
   repositionLink(id: $id, newPosition: $newPosition) {
-    id
-    position
-    name
-    url
-    image
+    ...LinkIndex
   }
 }
+
+${fragment}
 `;
 
 const repositionLinkOptions = {

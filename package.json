@@ -4,6 +4,7 @@
   "dependencies": {
     "@rails/webpacker": "^3.0.1",
     "apollo-client-preset": "^1.0.1",
+    "apollo-offline": "^0.0.7",
     "babel-preset-react": "^6.24.1",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
