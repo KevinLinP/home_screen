@@ -13,7 +13,7 @@ fragment LinkIndex on Link {
   url
   image
 }
-`
+`;
 
 const linksQuery = gql`
 query {

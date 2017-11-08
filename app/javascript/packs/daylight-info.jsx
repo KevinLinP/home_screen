@@ -7,9 +7,8 @@ import moment from 'moment'
 export default class DaylightInfo extends React.Component {
   constructor(props) {
     super(props);
+
     this.cacheKey = 'daylight-info';
-    this.init = this.init.bind(this);
-    this.refresh = this.refresh.bind(this);
 
     this.state = {
       events: lscache.get(this.cacheKey)
@@ -29,7 +28,7 @@ export default class DaylightInfo extends React.Component {
   }
 
   init() {
-    this.timerIntervalId = window.setInterval(this.refresh, 5000);
+    this.timerIntervalId = window.setInterval(this.refresh.bind(this), 5000);
     this.refresh();
   }
 

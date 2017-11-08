@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'underscore'
 import {arrayMove} from 'react-sortable-hoc';
+import lscache from 'lscache'
 
 import LinksList from './links-list'
 import LinksForm from './links-form'
@@ -8,18 +9,29 @@ import LinksForm from './links-form'
 export default class Links extends React.Component {
   constructor(props) {
     super(props);
+
+    let links = lscache.get('links');
+    if (!links) {
+      links = [];
+    }
+
     this.state = {
-      links: [],
+      links,
       showEditControls: false,
       form: this.emptyFormProps()
     }
   }
 
+  // bleh
   componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(this.state.links, nextProps.data.links)) {
-      this.setState({
-        links: nextProps.data.links
+    if (!_.isEqual(this.props.data.links, nextProps.data.links)) {
+      let links = nextProps.data.links;
+      links = _.each(links, (link) => {
+        return Object.assign({}, link, {index: link.position});
       });
+
+      this.setState({ links });
+      lscache.set('links', links);
     }
   }
 

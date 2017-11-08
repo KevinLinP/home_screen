@@ -187,10 +187,6 @@ apollo-link@1.0.0, apollo-link@^1.0.0:
     apollo-utilities "^0.2.0-beta.0"
     zen-observable "^0.6.0"
 
-apollo-offline@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/apollo-offline/-/apollo-offline-0.0.7.tgz#3b1a5822e2559e4164ff0bb96e66cadb3432a134"
-
 apollo-utilities@^0.2.0-beta.0:
   version "0.2.0-rc.3"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-0.2.0-rc.3.tgz#7bd93be0f587f20c5b46e21880272e305759fdc2"
