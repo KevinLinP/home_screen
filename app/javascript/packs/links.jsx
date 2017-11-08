@@ -9,8 +9,17 @@ export default class Links extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      links: [],
       showEditControls: false,
       form: this.emptyFormProps()
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(this.state.links, nextProps.data.links)) {
+      this.setState({
+        links: nextProps.data.links
+      });
     }
   }
 
@@ -45,7 +54,6 @@ export default class Links extends React.Component {
   }
 
   handleLinkEditButton(link) {
-    console.log('handling edit');
     if (link.id == this.state.form.id) {
       this.resetForm();
     } else {
@@ -79,21 +87,16 @@ export default class Links extends React.Component {
       return;
     }
 
-    const link = this.props.data.links[oldIndex];
+    const link = this.state.links[oldIndex];
 
-    //this.setState({
-      //links: arrayMove(this.props.data.links, oldIndex, newIndex) // doesn't update .index, only returns new array with reordered items
-    //});
+    this.setState({
+      links: arrayMove(this.state.links, oldIndex, newIndex) // doesn't update .index, only returns new array with reordered items
+    });
 
     this.props.repositionLink(link.id, newIndex);
   }
 
   render() {
-    let links = this.props.data.links;
-    if (!links) {
-      links = [];
-    }
-
     let form = null;
     let editButtonClass = 'homescreen-header-edit-toggle';
     if (this.state.showEditControls) {
@@ -105,7 +108,7 @@ export default class Links extends React.Component {
       axis: 'xy'
     };
     const linksListProps = {
-      links,
+      links: this.state.links,
       showEditControls: this.state.showEditControls,
       onLinkEditButton: this.handleLinkEditButton.bind(this),
       onDelete: this.handleDelete.bind(this),
